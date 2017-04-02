@@ -1,0 +1,37 @@
+// Search result styles
+// ====================
+
+@import 'dirg';
+@import 'color';
+
+.SearchResult {
+  transition: background .35s linear;
+  position: relative;
+  padding-left: units(1);
+  cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    background: rgba(color('second'), .1);
+  }
+}
+
+.icon {
+  font-size: units(.5);
+  line-height: units(.5);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  color: color('third');
+}
+
+.text {
+  font-size: font-scale(1);
+  line-height: units(1.5);
+  font-family: 'Overpass Mono';
+  font-weight: 100;
+  color: color('second');
+}

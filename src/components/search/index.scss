@@ -38,10 +38,18 @@ $transition-duration: .35s;
   top: units(1);
 }
 
-.form {
-  margin-top: 15vh;
+.form,
+.resultsWrapper {
   width: columns(5);
   text-align: left;
+}
+
+.form {
+  margin-top: 15vh;
+}
+
+.resultsWrapper {
+  margin-top: units(1);
 }
 
 .textfield {

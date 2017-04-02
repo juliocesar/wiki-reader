@@ -4,6 +4,7 @@
 import React, { PropTypes } from 'react'
 import style from './index.scss'
 import cx from 'classnames'
+import SearchResult from '../search-result'
 import { emit } from '../event-bus'
 
 const Search = ({ results, query, isVisible }) => {
@@ -31,6 +32,9 @@ const Search = ({ results, query, isVisible }) => {
         Press enter to search
       </div>
     </form>
+    <div className={style.resultsWrapper}>
+      {results.map(result => <SearchResult result={result} />)}
+    </div>
   </div>
 }
 

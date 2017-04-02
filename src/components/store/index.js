@@ -9,7 +9,13 @@ const Store = new class {
   @observable ui = {
     isSearchVisible: true
   }
-  @observable searchResults = []
+  @observable searchResults = [
+    randomSearchResult(),
+    randomSearchResult(),
+    randomSearchResult(),
+    randomSearchResult(),
+    randomSearchResult()
+  ]
   @observable searchQuery = ''
   @observable articles = [
     randomArticle(),
@@ -25,6 +31,13 @@ const Store = new class {
     this.ui.isSearchVisible = !this.ui.isSearchVisible
   }
 }()
+
+function randomSearchResult() {
+  return {
+    id: faker.random.number(),
+    text: faker.lorem.words(1)
+  }
+}
 
 function randomArticle() {
   return {
