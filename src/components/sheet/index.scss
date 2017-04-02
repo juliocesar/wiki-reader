@@ -1,0 +1,112 @@
+// Sheet styles
+// ============
+
+@import 'color';
+@import 'dirg';
+
+.Sheet {
+  min-width: 80%;
+  max-width: 80%;
+  color: color('first');
+  background: color('second');
+  text-align: left;
+  padding: units(1);
+}
+
+.title {
+  @include font-size(4);
+  font-family: 'Playfair Display';
+}
+
+.textWrapper {
+  @include font-size(0);
+  margin-top: units(2);
+  white-space: pre-line;
+  font-family: 'Fauna One';
+
+  .mw-editsection {
+    display: none;
+  }
+
+  .rellink,
+  .relarticle,
+  .mainarticle,
+  .hatnote,
+  .seealso,
+  .thumbcaption,
+  .metadata {
+    @include font-size(-2);
+  }
+
+  .infobox {
+    display: none;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .example-image {
+    display: block;
+    max-width: 75%;
+    margin: units(1) auto;
+  }
+
+  .tleft {
+    margin: 0 units(1) units(1) 0;
+    float: left;
+  }
+
+  .tright {
+    margin: 0 0 units(1) units(1);
+    float: right;
+  }
+
+  .metadata {
+    margin-top: units(.5);
+  }
+
+  .references {
+    li {
+      margin-top: units(.5);
+    }
+
+    .mw-cite-backlink {
+      margin-right: units(.5);
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ul {
+    list-style: disc inside;
+  }
+
+  p,
+  li,
+  blockquote {
+    @include font-size(0);
+    margin-top: units(.5);
+  }
+
+  em {
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  h2 {
+    @include font-size(2);
+    margin-top: units(2);
+  }
+
+  h3 {
+    @include font-size(1);
+    margin-top: units(1.5);
+  }
+}

@@ -1,0 +1,15 @@
+// Articles group styles
+// =====================
+
+@import 'color';
+@import 'dirg';
+
+.Book {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 0 units(4);
+
+  >* + * {
+    margin-left: columns(1);
+  }
+}
