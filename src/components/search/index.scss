@@ -40,12 +40,12 @@ $transition-duration: .35s;
 
 .form {
   margin-top: 15vh;
-  width: columns(4);
+  width: columns(5);
   text-align: left;
 }
 
 .textfield {
-  @include font-size(3);
+  @include font-size(4);
   width: 100%;
   transition: all $transition-duration linear;
   font-family: 'Overpass Mono';
