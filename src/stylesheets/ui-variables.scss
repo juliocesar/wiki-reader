@@ -1,0 +1,13 @@
+// UI variables
+// ============
+//
+// Coordinates variables shared by elements of the UI.
+
+$search-transition-duration: .5s;
+
+.icon {
+  display: inline-block;
+  font-size: units(1);
+  line-height: units(1);
+  color: color('third');
+}

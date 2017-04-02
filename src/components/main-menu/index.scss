@@ -3,6 +3,7 @@
 
 @import 'color';
 @import 'dirg';
+@import 'ui-variables';
 
 .MainMenu {
   position: fixed;
@@ -24,7 +25,14 @@
 }
 
 .searchButton {
+  transition: opacity $search-transition-duration linear;
   margin-left: auto;
+  opacity: .999;
+}
+
+.searchButtonHidden {
+  composes: searchButton;
+  opacity: .001;
 }
 
 .name {
@@ -34,8 +42,5 @@
 }
 
 .icon {
-  display: inline-block;
-  font-size: units(1);
-  line-height: units(1);
-  color: color('third');
+  composes: icon;
 }
