@@ -6,10 +6,6 @@ import style from './index.scss'
 import cx from 'classnames'
 import { emit } from '../event-bus'
 
-function onQueryChange(event) {
-  emit('query:update', event.target.value)
-}
-
 const Search = ({ results, query, isVisible }) => {
   const classNames = cx({
     [style.Search]: isVisible,
@@ -17,13 +13,23 @@ const Search = ({ results, query, isVisible }) => {
   })
 
   return <div className={classNames}>
+    <button
+      className={style.closeButton}
+      onClick={e => emit('search:toggle')}>
+      <i className={cx(style.icon, 'icon-close')} />
+    </button>
     <form className={style.form}>
       <input
         type="text"
-        onChange={onQueryChange}
+        className={style.textfield}
+        onChange={e => emit('query:update', e.target.value)}
         autoComplete="off"
         autoCorrect="off"
+        placeholder="Wikipedia search"
         spellCheck="false" />
+      <div className={style.instruction}>
+        Press enter to search
+      </div>
     </form>
   </div>
 }

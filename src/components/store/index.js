@@ -7,7 +7,7 @@ import faker from 'faker'
 
 const Store = new class {
   @observable ui = {
-    isSearchVisible: false
+    isSearchVisible: true
   }
   @observable searchResults = []
   @observable searchQuery = ''
@@ -19,6 +19,10 @@ const Store = new class {
 
   @action setQuery(value) {
     this.searchQuery = value
+  }
+
+  @action toggleSearch() {
+    this.ui.isSearchVisible = !this.ui.isSearchVisible
   }
 }()
 
@@ -34,8 +38,13 @@ function onQueryUpdate(value) {
   Store.setQuery(value)
 }
 
+function onSearchToggle() {
+  Store.toggleSearch()
+}
+
 const EventsMap = {
-  'query:update': onQueryUpdate
+  'query:update': onQueryUpdate,
+  'search:toggle': onSearchToggle
 }
 
 export function bindEvents() {

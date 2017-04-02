@@ -2,13 +2,79 @@
 // ==================
 
 @import 'color';
+@import 'dirg';
+@import 'ui-variables';
+
+$transition-duration: .35s;
 
 .Search {
+  transition: opacity $search-transition-duration linear;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(black, .5);
+  background: rgba(black, .85);
   z-index: 3;
+}
+
+.SearchHidden {
+  composes: Search;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: .001;
+}
+
+.icon {
+  composes: icon;
+}
+
+.closeButton {
+  position: absolute;
+  right: units(1);
+  top: units(1);
+}
+
+.form {
+  margin-top: 15vh;
+  width: columns(4);
+  text-align: left;
+}
+
+.textfield {
+  @include font-size(3);
+  width: 100%;
+  transition: all $transition-duration linear;
+  font-family: 'Overpass Mono';
+  box-shadow: 0 1px 0 color('third');
+  color: color('second');
+  opacity: .5;
+
+  &:focus,
+  &:active {
+    opacity: .999;
+    box-shadow: 0 1px 0 color('third'),
+                0 2px 0 color('third'),
+                0 3px 0 color('third');
+  }
+}
+
+.textfield:focus + .instruction,
+.textfield:active + .instruction {
+  transform: translateY(0);
+  opacity: .999;
+}
+
+.instruction {
+  transition: all $transition-duration cubic-bezier(0.19, 1, 0.22, 1);;
+  transform: translateY(50%);
+  font-size: font-scale(-1);
+  line-height: units(2);
+  font-family: 'Overpass Mono';
+  font-weight: 100;
+  color: color('third');
+  opacity: .001;
 }
