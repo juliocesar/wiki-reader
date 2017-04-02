@@ -1,0 +1,10 @@
+// Main wrapper styles
+// ===================
+
+@import 'tools/color';
+@import 'tools/dirg';
+
+.Main {
+  background: color('Grey 2');
+  padding: units(1) 0 units(2) 0;
+}

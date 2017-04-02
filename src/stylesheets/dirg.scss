@@ -1,0 +1,71 @@
+// Dirg
+// ====
+//
+// See https://github.com/juliocesar/dirg/
+
+$dirg-scales: (
+  default: (
+    font-size: 16px,
+    unit: 21px,
+    factor: 1.2
+  )
+);
+
+// A power calculation function. See:
+// http://sassmeister.com/gist/10620fefd1ed75189f1b
+@function pow($x, $y) {
+  $ret: 1;
+
+  @if $y > 0 {
+    @for $i from 1 through $y {
+      $ret: $ret * $x;
+    }
+  }
+
+  @else {
+    @for $i from $y to 0 {
+      $ret: $ret / $x;
+    }
+  }
+
+  @return $ret;
+}
+
+// Returns a value to be used in `font-size`.
+@function font-scale($x, $size: 'default') {
+  $scale: map-get($dirg-scales, $size);
+  $factor: map-get($scale, 'factor');
+  $font-size: map-get($scale, 'font-size');
+  @return round($font-size * pow($factor, $x));
+}
+
+// Returns the diff between two values in a growth/shrink factor.
+@function factor-diff($args...) {
+  $arguments: keywords($args);
+  @return map-get($arguments, to) / map-get($arguments, from);
+}
+
+// Returns a grid unit of space, calculated from the scale above.
+@function units($x, $size: 'default') {
+  $scale: map-get($dirg-scales, $size);
+  @return round(map-get($scale, 'unit') * $x);
+}
+
+// Shortcut for adding multiple units and institute columns thinking.
+@function columns($x, $size: 'default') {
+  @return units(4, $size) * $x;
+}
+
+// A helper for setting an appropriate font size and line-height for it.
+@mixin font-size($units, $size: 'default') {
+  $scale: map-get($dirg-scales, $size);
+  $unit: map-get($scale, 'unit');
+  $lh: $unit;
+
+  @while $lh < font-scale($units, $size) {
+    $lh: $lh + $unit;
+  }
+
+  font-size: font-scale($units, $size);
+  line-height: $lh;
+}

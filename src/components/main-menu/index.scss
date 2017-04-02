@@ -1,0 +1,37 @@
+// Main menu styles
+// ================
+
+@import 'color';
+@import 'dirg';
+
+.MainMenu {
+  position: fixed;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  height: units(3);
+  padding: 0 units(1);
+  width: 100%;
+}
+
+.button {
+  margin-left: units(1);
+}
+
+.searchButton {
+  margin-left: auto;
+}
+
+.name {
+  @include font-size(1);
+  font-family: 'Overpass Mono';
+  color: color('second');
+}
+
+.icon {
+  display: inline-block;
+  font-size: units(1);
+  line-height: units(1);
+  color: color('third');
+}

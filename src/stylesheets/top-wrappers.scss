@@ -1,0 +1,13 @@
+// Top wrapper styles
+// ==================
+
+@import 'color';
+
+html {
+  background: color('first');
+}
+
+html,
+body {
+  min-height: 100%;
+}
