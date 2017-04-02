@@ -10,9 +10,13 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
+  top: 0;
+  left: 0;
   height: units(3);
   padding: 0 units(1);
   width: 100%;
+  background: color('first');
+  z-index: 2;
 }
 
 .button {
