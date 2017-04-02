@@ -7,6 +7,7 @@
 .Book {
   display: flex;
   flex-flow: row nowrap;
+  align-items: flex-start;
   padding: 0 units(4);
 
   >* + * {
