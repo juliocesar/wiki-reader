@@ -9,7 +9,7 @@ const SearchResult = ({ result }) => (
   <div className={style.SearchResult}>
     <i className={cx(style.icon, 'icon-search-result')} />
     <span className={style.text}>
-      {result.text}
+      {result.title}
     </span>
   </div>
 )

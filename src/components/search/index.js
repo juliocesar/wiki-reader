@@ -4,10 +4,16 @@
 import React, { PropTypes } from 'react'
 import style from './index.scss'
 import cx from 'classnames'
-import SearchResult from '../search-result'
 import { emit } from '../event-bus'
+import { observer } from 'mobx-react'
+import SearchResult from '../search-result'
 
-const Search = ({ results, query, isVisible }) => {
+function onSubmit(event) {
+  event.preventDefault()
+  emit('search:submit')
+}
+
+const Search = observer(({ results, query, isVisible }) => {
   const classNames = cx({
     [style.Search]: isVisible,
     [style.SearchHidden]: !isVisible
@@ -19,7 +25,9 @@ const Search = ({ results, query, isVisible }) => {
       onClick={e => emit('search:toggle')}>
       <i className={cx(style.icon, 'icon-close')} />
     </button>
-    <form className={style.form}>
+    <form
+      className={style.form}
+      onSubmit={onSubmit}>
       <input
         type="text"
         className={style.textfield}
@@ -36,7 +44,7 @@ const Search = ({ results, query, isVisible }) => {
       {results.map(result => <SearchResult result={result} />)}
     </div>
   </div>
-}
+})
 
 Search.propTypes = {
   results: PropTypes.array,
