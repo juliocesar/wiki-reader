@@ -3,19 +3,14 @@
 
 import { observable, action } from 'mobx'
 import { on } from '../event-bus'
+import { search } from '../wikipedia-api'
 import faker from 'faker'
 
 const Store = new class {
   @observable ui = {
     isSearchVisible: true
   }
-  @observable searchResults = [
-    randomSearchResult(),
-    randomSearchResult(),
-    randomSearchResult(),
-    randomSearchResult(),
-    randomSearchResult()
-  ]
+  @observable searchResults = []
   @observable searchQuery = ''
   @observable articles = [
     randomArticle(),
@@ -27,17 +22,14 @@ const Store = new class {
     this.searchQuery = value
   }
 
+  @action setResults(results) {
+    this.searchResults = [...results]
+  }
+
   @action toggleSearch() {
     this.ui.isSearchVisible = !this.ui.isSearchVisible
   }
 }()
-
-function randomSearchResult() {
-  return {
-    id: faker.random.number(),
-    text: faker.lorem.words(1)
-  }
-}
 
 function randomArticle() {
   return {
@@ -55,9 +47,14 @@ function onSearchToggle() {
   Store.toggleSearch()
 }
 
+function onSearchSubmit() {
+  search(Store.searchQuery, { complete: results => Store.setResults(results) })
+}
+
 const EventsMap = {
   'query:update': onQueryUpdate,
-  'search:toggle': onSearchToggle
+  'search:toggle': onSearchToggle,
+  'search:submit': onSearchSubmit
 }
 
 export function bindEvents() {
@@ -65,3 +62,5 @@ export function bindEvents() {
 }
 
 export default Store
+
+window.store = Store
