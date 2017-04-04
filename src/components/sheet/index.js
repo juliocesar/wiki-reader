@@ -12,7 +12,7 @@ const Sheet = ({ article }) => (
       <h1 className={style.title}>{article.title}</h1>
       <div
         className={style.textWrapper}
-        dangerouslySetInnerHTML={{ __html: article.text }} />
+        dangerouslySetInnerHTML={{ __html: article.body }} />
     </header>
   </article>
 )

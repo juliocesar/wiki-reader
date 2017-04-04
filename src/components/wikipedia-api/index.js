@@ -3,6 +3,24 @@
 
 import jsonp from './jsonp'
 
+function hash(string) {
+  let hash = 0
+  let i
+  let chr
+
+  if (string.length === 0) {
+    return hash
+  }
+
+  for (i = 0; i < string.length; i++) {
+    chr = string.charCodeAt(i)
+    hash = ((hash << 5) - hash) + chr
+    hash |= 0
+  }
+
+  return hash
+}
+
 function articleUrl(name) {
   return `
     http://en.wikipedia.org/w/api.php?
@@ -20,16 +38,32 @@ function searchUrl(query) {
 
 function searchResultsToArticles(response) {
   return response.query.search.map(result => {
-    return {
-      title: result.title,
-      text: null,
-      snippet: result.snippet
-    }
+    return article({ title: result.title, snippet: result.snippet })
   })
 }
 
+export function article(attributes) {
+  return Object.assign({
+    id: null || hash(attributes.title),
+    title: null,
+    body: null,
+    snippet: null
+  }, attributes)
+}
+
 export function fetchArticle(name, options = {}) {
-  jsonp(Object.assign({}, { url: articleUrl(name) }, options))
+  jsonp({
+    url: articleUrl(name),
+    complete: response => {
+      if (options.complete) {
+        options.complete(article({
+          id: response.parse.pageid,
+          title: response.parse.displaytitle,
+          body: response.parse.text['*']
+        }))
+      }
+    }
+  })
 }
 
 export function search(query, options = {}) {
