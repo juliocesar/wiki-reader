@@ -3,20 +3,74 @@
 
 import { observable, action } from 'mobx'
 import { on } from '../event-bus'
-import { search } from '../wikipedia-api'
-import faker from 'faker'
+import { search, article, fetchArticle } from '../wikipedia-api'
+import createHashHistory from 'history/createHashHistory'
+import queryString from 'query-string'
+
+function arrayUnion(arr1, arr2, equalityFunc) {
+  let union = arr1.concat(arr2)
+
+  for (var i = 0; i < union.length; i++) {
+    for (var j = i + 1; j < union.length; j++) {
+      if (equalityFunc(union[i], union[j])) {
+        union.splice(j, 1)
+        j--
+      }
+    }
+  }
+
+  return union
+}
 
 const Store = new class {
+  history: null
+
+  titlesInUrl = () => {
+    const parsed = queryString.parse(this.history.location.search)
+
+    return parsed.a ?
+      parsed.a.split(/,/).map(title => decodeURI(title)) :
+      []
+  }
+
+  syncWithTitles = (shouldFetch = true) => {
+    const titles = this.titlesInUrl()
+    const filtered = this.articles.filter(article => {
+      return titles.indexOf(article.title) > -1
+    })
+    const filteredTitles = filtered.map(article => article.title)
+    const titlesArticles = titles
+      .filter(title => filteredTitles.indexOf(title) === -1)
+      .map(title => article({ title: title }))
+    const union = arrayUnion(filtered, titlesArticles, (a1, a2) => {
+      a1.title === a2.title
+    })
+    this.articles = [...union]
+
+    if (shouldFetch) {
+      this.fetchAllArticles()
+    }
+  }
+
+  fetchAllArticles = () => {
+    this.articles.map(article => {
+      if (article.body === null) {
+        fetchArticle(article.title, {
+          complete: fetched => {
+            const index = this.articles.indexOf(article)
+            this.articles[index] = fetched
+          }
+        })
+      }
+    })
+  }
+
   @observable ui = {
     isSearchVisible: true
   }
   @observable searchResults = []
   @observable searchQuery = ''
-  @observable articles = [
-    randomArticle(),
-    randomArticle(),
-    randomArticle()
-  ]
+  @observable articles = []
 
   @action setQuery(value) {
     this.searchQuery = value
@@ -26,18 +80,15 @@ const Store = new class {
     this.searchResults = [...results]
   }
 
-  @action toggleSearch() {
-    this.ui.isSearchVisible = !this.ui.isSearchVisible
+  @action addArticle(article) {
+    this.articles = [...this.articles, article]
+  }
+
+  @action toggleSearch(showOrHide = null) {
+    this.ui.isSearchVisible = showOrHide !== null ?
+      showOrHide : !this.ui.isSearchVisible
   }
 }()
-
-function randomArticle() {
-  return {
-    id: faker.random.number(),
-    title: faker.lorem.words(),
-    text: faker.lorem.paragraphs(Math.random() * (13 - 3) + 3)
-  }
-}
 
 function onQueryUpdate(value) {
   Store.setQuery(value)
@@ -51,10 +102,28 @@ function onSearchSubmit() {
   search(Store.searchQuery, { complete: results => Store.setResults(results) })
 }
 
+function onArticleAdd(title) {
+  const titles = Store.titlesInUrl()
+  if (titles.indexOf(title) > -1) {
+    return false
+  }
+  Store.history.push(`/?a=${
+    [...Store.titlesInUrl(), encodeURI(title)].join(',')
+  }`)
+}
+
+function onAppBoot() {
+  Store.history = createHashHistory()
+  Store.history.listen(Store.syncWithTitles)
+  Store.syncWithTitles()
+}
+
 const EventsMap = {
   'query:update': onQueryUpdate,
   'search:toggle': onSearchToggle,
-  'search:submit': onSearchSubmit
+  'search:submit': onSearchSubmit,
+  'article:add': onArticleAdd,
+  'app:boot': onAppBoot
 }
 
 export function bindEvents() {
@@ -62,5 +131,3 @@ export function bindEvents() {
 }
 
 export default Store
-
-window.store = Store
