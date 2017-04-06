@@ -13,8 +13,7 @@
   justify-content: flex-start;
   top: 0;
   left: 0;
-  height: units(3);
-  padding: 0 units(1);
+  padding: $menu-padding;
   width: 100%;
   background: color('first');
   z-index: 2;

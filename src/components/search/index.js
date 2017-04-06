@@ -1,7 +1,7 @@
 // Search form
 // ===========
 
-import React, { PropTypes } from 'react'
+import React, { PropTypes, Component } from 'react'
 import style from './index.scss'
 import cx from 'classnames'
 import { emit } from '../event-bus'
@@ -13,49 +13,59 @@ function onSubmit(event) {
   emit('search:submit')
 }
 
-const Search = observer(({ results, query, isVisible }) => {
-  const classNames = cx({
-    [style.Search]: isVisible,
-    [style.SearchHidden]: !isVisible
-  })
+@observer
+export default class Search extends Component {
+  static propTypes = {
+    results: PropTypes.array,
+    isVisible: PropTypes.bool
+  }
 
-  return <div className={classNames}>
-    <button
-      className={style.closeButton}
-      onClick={e => emit('search:toggle')}>
-      <i className={cx(style.icon, 'icon-close')} />
-    </button>
-    <form
-      className={style.form}
-      onSubmit={onSubmit}>
-      <input
-        type="text"
-        className={style.textfield}
-        onChange={e => emit('query:update', e.target.value)}
-        autoComplete="off"
-        autoCorrect="off"
-        placeholder="Wikipedia search"
-        spellCheck="false" />
-      <div className={style.instruction}>
-        Press enter to search
+  static defaultProps = {
+    results: [],
+    isVisible: false
+  }
+
+  componentDidUpdate() {
+    if (this.props.isVisible === true) {
+      this.refs.textfield.focus()
+    }
+  }
+
+  render() {
+    const { isVisible, results } = this.props
+
+    const classNames = cx({
+      [style.SearchVisible]: isVisible,
+      [style.Search]: !isVisible
+    })
+
+    return <div className={classNames}>
+      <button
+        className={style.closeButton}
+        onClick={e => emit('search:toggle')}>
+        <i className={cx(style.icon, 'icon-close')} />
+      </button>
+      <form
+        className={style.form}
+        onSubmit={onSubmit}>
+        <input
+          type="text"
+          className={style.textfield}
+          ref="textfield"
+          onChange={e => emit('query:update', e.target.value)}
+          autoComplete="off"
+          autoCorrect="off"
+          placeholder="Wikipedia search"
+          spellCheck="false" />
+        <div className={style.instruction}>
+          Press enter to search
+        </div>
+      </form>
+      <div className={style.resultsWrapper}>
+        {results.map(result => (
+          <SearchResult result={result} key={result.title} />
+        ))}
       </div>
-    </form>
-    <div className={style.resultsWrapper}>
-      {results.map(result => <SearchResult result={result} />)}
     </div>
-  </div>
-})
-
-Search.propTypes = {
-  results: PropTypes.array,
-  query: PropTypes.string,
-  isVisible: PropTypes.bool
+  }
 }
-
-Search.defaultProps = {
-  results: [],
-  isVisible: false,
-  query: ''
-}
-
-export default Search

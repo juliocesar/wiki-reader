@@ -37,6 +37,8 @@ function searchUrl(query) {
 }
 
 function searchResultsToArticles(response) {
+  window.rep = response
+
   return response.query.search.map(result => {
     return article({ title: result.title, snippet: result.snippet })
   })
