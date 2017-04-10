@@ -2,6 +2,7 @@
 // ====================
 
 import jsonp from './jsonp'
+import { localStorageCache as cache } from './cache'
 
 function hash(string) {
   let hash = 0
@@ -54,16 +55,26 @@ export function article(attributes) {
 }
 
 export function fetchArticle(name, options = {}) {
+  if (cache.exists(name)) {
+    const response = cache.get(name)
+
+    return options.complete(article({
+      id: response.parse.pageid,
+      title: response.parse.displaytitle,
+      body: response.parse.text['*']
+    }))
+  }
+
   jsonp({
     url: articleUrl(name),
     complete: response => {
-      if (options.complete) {
-        options.complete(article({
-          id: response.parse.pageid,
-          title: response.parse.displaytitle,
-          body: response.parse.text['*']
-        }))
-      }
+      cache.set(name, response)
+
+      options.complete(article({
+        id: response.parse.pageid,
+        title: response.parse.displaytitle,
+        body: response.parse.text['*']
+      }))
     }
   })
 }
@@ -72,9 +83,7 @@ export function search(query, options = {}) {
   jsonp({
     url: searchUrl(query),
     complete: response => {
-      if (options.complete) {
-        options.complete(searchResultsToArticles(response))
-      }
+      options.complete(searchResultsToArticles(response))
     }
   })
 }
