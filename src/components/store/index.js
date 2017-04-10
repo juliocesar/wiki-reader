@@ -65,9 +65,7 @@ const Store = new class {
     })
   }
 
-  @observable ui = {
-    isSearchVisible: true
-  }
+  @observable ui = { isSearchVisible: false }
   @observable searchResults = []
   @observable searchQuery = ''
   @observable articles = []
@@ -107,9 +105,12 @@ function onArticleAdd(title) {
   if (titles.indexOf(title) > -1) {
     return false
   }
+
   Store.history.push(`/?a=${
     [...Store.titlesInUrl(), encodeURI(title)].join(',')
   }`)
+
+  Store.toggleSearch(false)
 }
 
 function onAppBoot() {
