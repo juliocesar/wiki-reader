@@ -7,8 +7,13 @@ import Sheet from '../sheet'
 
 const Book = ({ articles }) => (
   <div className={style.Book}>
-    {articles.map(article => {
-      return <Sheet key={article.id} article={article} />
+    {articles.map((article, index) => {
+      return <Sheet
+        key={article.id}
+        article={article}
+        isFirst={index === 0}
+        isLast={index === articles.length - 1}
+      />
     })}
   </div>
 )

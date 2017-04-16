@@ -7,7 +7,6 @@
 .SearchResult {
   transition: background .35s linear;
   position: relative;
-  padding-left: units(1);
   cursor: pointer;
   max-width: 100%;
   overflow: hidden;
@@ -16,16 +15,6 @@
   &:hover {
     background: rgba(color('second'), .1);
   }
-}
-
-.icon {
-  font-size: units(.5);
-  line-height: units(.5);
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  color: color('third');
 }
 
 .text {

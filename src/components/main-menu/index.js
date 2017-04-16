@@ -17,9 +17,6 @@ const MainMenu = ({ isSearchVisible }) => {
       Wiki Reader
     </span>
     <button className={style.button}>
-      <i className={cx(style.icon, 'icon-reorder')} />
-    </button>
-    <button className={style.button}>
       <i className={cx(style.icon, 'icon-share')} />
     </button>
     <button

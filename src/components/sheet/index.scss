@@ -5,6 +5,7 @@
 @import 'dirg';
 
 .Sheet {
+  position: relative;
   min-width: 80%;
   max-width: 80%;
   color: color('first');
@@ -16,6 +17,25 @@
 .title {
   @include font-size(4);
   font-family: 'Playfair Display';
+}
+
+.menu {
+  position: absolute;
+  top: units(2.5);
+  right: units(2);
+}
+
+.icon {
+  @include font-size(0);
+  color: color('first');
+}
+
+.button[disabled] {
+  opacity: .5;
+}
+
+.button + button {
+  margin-left: units(.5);
 }
 
 .textWrapper {
