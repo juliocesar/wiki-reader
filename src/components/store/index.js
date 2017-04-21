@@ -42,10 +42,11 @@ const Store = new class {
     const titlesArticles = titles
       .filter(title => filteredTitles.indexOf(title) === -1)
       .map(title => article({ title: title }))
-    const union = arrayUnion(filtered, titlesArticles, (a1, a2) => {
+    const orderedUnion = arrayUnion(filtered, titlesArticles, (a1, a2) => {
       a1.title === a2.title
     })
-    this.articles = [...union]
+    .sort(a1 => titles.indexOf(a1.title))
+    this.articles = [...orderedUnion]
 
     if (shouldFetch) {
       this.fetchAllArticles()
@@ -113,6 +114,20 @@ function onArticleAdd(title) {
   Store.toggleSearch(false)
 }
 
+function onArticleMove(title, index) {
+  const titles = Store.titlesInUrl()
+  const currentIndex = titles.indexOf(title)
+  const newIndex = currentIndex + index
+
+  if (newIndex > titles.length || newIndex < 0) {
+    return false
+  }
+
+  titles.splice(newIndex, 0, titles.splice(currentIndex, 1)[0])
+
+  Store.history.push(`/?a=${[...titles].join(',')}`)
+}
+
 function onAppBoot() {
   Store.history = createHashHistory()
   Store.history.listen(Store.syncWithTitles)
@@ -124,6 +139,8 @@ const EventsMap = {
   'search:toggle': onSearchToggle,
   'search:submit': onSearchSubmit,
   'article:add': onArticleAdd,
+  'article:back': title => onArticleMove(title, -1),
+  'article:forward': title => onArticleMove(title, 1),
   'app:boot': onAppBoot
 }
 
