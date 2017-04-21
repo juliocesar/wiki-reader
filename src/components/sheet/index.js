@@ -6,14 +6,19 @@
 import React, { PropTypes } from 'react'
 import cx from 'classnames'
 import style from './index.scss'
+import { emit } from '../event-bus'
 
 const Sheet = ({ article, isFirst, isLast }) => (
   <article className={style.Sheet} key={article.id}>
     <menu className={style.menu}>
-      <button className={style.button} {...{ disabled: isFirst }}>
+      <button
+        onClick={() => emit('article:back', article.title)}
+        className={style.button} {...{ disabled: isFirst }}>
         <i className={cx(style.icon, 'icon-move-left')} />
       </button>
-      <button className={style.button} {...{ disabled: isLast }}>
+      <button
+        onClick={() => emit('article:forward', article.title)}
+        className={style.button} {...{ disabled: isLast }}>
         <i className={cx(style.icon, 'icon-move-right')} />
       </button>
       <button className={style.button}>
