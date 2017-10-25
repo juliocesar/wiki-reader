@@ -8,6 +8,7 @@ var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
+var path = require('path');
 
 
 
@@ -191,6 +192,11 @@ module.exports = {
         ]
       }),
     ];
+  },
+  sassLoader: {
+    includePaths: [
+      path.resolve(__dirname, '../src/stylesheets')
+    ]
   },
   plugins: [
     // Makes some environment variables available in index.html.

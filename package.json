@@ -1,5 +1,6 @@
 {
   "name": "client-boilerplate",
+  "homepage": "http://juliocesar.github.io/wiki-reader",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -46,6 +47,7 @@
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.10.0",
     "fs-extra": "0.30.0",
+    "gh-pages": "^1.0.0",
     "html-webpack-plugin": "2.24.0",
     "http-proxy-middleware": "0.17.3",
     "jest": "18.1.0",
@@ -68,7 +70,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "jest": {
     "collectCoverageFrom": [
