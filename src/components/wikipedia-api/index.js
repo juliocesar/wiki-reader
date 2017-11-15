@@ -24,7 +24,7 @@ function hash(string) {
 
 function articleUrl(name) {
   return `
-    http://en.wikipedia.org/w/api.php?
+    https://en.wikipedia.org/w/api.php?
     action=parse&page=${name}&format=json&
     prop=text|displaytitle|revid&mobileformat=html
   `.trim().replace(/\n/, '')
@@ -32,7 +32,7 @@ function articleUrl(name) {
 
 function searchUrl(query) {
   return `
-    http://en.wikipedia.org/w/api.php?
+    https://en.wikipedia.org/w/api.php?
     action=query&list=search&srsearch=${query}&format=json&srlimit=10
   `.trim().replace(/\n/, '')
 }
