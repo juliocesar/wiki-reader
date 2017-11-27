@@ -8,6 +8,21 @@ import cx from 'classnames'
 import style from './index.scss'
 import { emit } from '../event-bus'
 
+function isWikiLink(node) {
+  return node.tagName === 'A' && (/\/wiki\//).test(node.href)
+}
+
+const onClickArticleContents = event => {
+  const node = event.target
+
+  if (isWikiLink(node)) {
+    event.preventDefault()
+    const title = node.href.substr(node.href.lastIndexOf('/') + 1)
+    emit('article:add', title)
+  }
+  return false
+}
+
 const Sheet = ({ article, isFirst, isLast }) => (
   <article className={style.Sheet} key={article.id}>
     <menu className={style.menu}>
@@ -29,6 +44,7 @@ const Sheet = ({ article, isFirst, isLast }) => (
       <h1 className={style.title}>{article.title}</h1>
       <div
         className={style.textWrapper}
+        onClick={onClickArticleContents}
         dangerouslySetInnerHTML={{ __html: article.body }} />
     </header>
   </article>
